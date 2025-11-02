@@ -1,5 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
+import TradingViewChart from './TradingViewChart';
+import PaperTradingPanel from './PaperTradingPanel';
 
 interface MarketData {
   id: number;
@@ -50,6 +52,8 @@ const EnhancedTradingDashboard: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [searchResults, setSearchResults] = useState<StockSearchResult[]>([]);
   const [showSearch, setShowSearch] = useState(false);
+  const [currentPrice, setCurrentPrice] = useState<number>(0);
+  const [showPaperTrading, setShowPaperTrading] = useState(true);
 
   const timeframes = [
     { value: '1m', label: '1M' },
