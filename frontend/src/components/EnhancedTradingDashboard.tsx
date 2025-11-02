@@ -139,7 +139,7 @@ const EnhancedTradingDashboard: React.FC = () => {
     }
   }, [selectedSymbol, timeframe]);
 
-  const searchStocks = async (query: string) => {
+  const searchStocks = useCallback(async (query: string) => {
     console.log('🔍 Searching for:', query);
     
     if (query.length < 2) {
@@ -290,7 +290,7 @@ const EnhancedTradingDashboard: React.FC = () => {
     }, 300);
 
     return () => clearTimeout(debounceTimer);
-  }, [searchQuery]);
+  }, [searchQuery, searchStocks]);
 
   // Close search dropdown when clicking outside
   useEffect(() => {
