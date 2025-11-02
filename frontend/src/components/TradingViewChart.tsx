@@ -25,119 +25,63 @@ const TradingViewChart: React.FC<TradingViewChartProps> = ({
   const [marketStatus, setMarketStatus] = useState<string>('');
   const [lastUpdate, setLastUpdate] = useState<string>('');
 
-  // Generate realistic market data
-  const generateMarketData = (symbol: string, days: number = 100): CandleData[] => {
-    const data: CandleData[] = [];
-    let basePrice = getBasePrice(symbol);
-    const now = Date.now();
-    
-    for (let i = days; i >= 0; i--) {
-      const time = now - (i * 24 * 60 * 60 * 1000); // Daily data
-      
-      // Market volatility simulation
-      const volatility = 0.02 + Math.random() * 0.03; // 2-5% volatility
-      const trend = (Math.random() - 0.5) * 0.001; // Small trend component
-      
-      // Generate OHLC data
-      const open = basePrice;
-      const change = (Math.random() - 0.5) * volatility + trend;
-      const close = open * (1 + change);
-      
-      const high = Math.max(open, close) * (1 + Math.random() * 0.01);
-      const low = Math.min(open, close) * (1 - Math.random() * 0.01);
-      
-      const volume = Math.floor(Math.random() * 1000000) + 100000;
-      
-      data.push({
-        time,
-        open: parseFloat(open.toFixed(2)),
-        high: parseFloat(high.toFixed(2)),
-        low: parseFloat(low.toFixed(2)),
-        close: parseFloat(close.toFixed(2)),
-        volume
-      });
-      
-      basePrice = close; // Use close as next open
-    }
-    
-    return data;
-  };
-
-  const getBasePrice = (symbol: string): number => {
-    const prices: { [key: string]: number } = {
-      'NIFTY50': 19500,
-      'SENSEX': 65000,
-      'RELIANCE': 2500,
-      'TCS': 3500,
-      'INFY': 1400,
-      'HDFC': 1650,
-      'ICICIBANK': 950,
-      'SBIN': 580,
-      'BHARTIARTL': 850,
-      'ITC': 420,
-      'HINDUNILVR': 2600,
-      'KOTAKBANK': 1750,
-      'LT': 3200,
-      'ASIANPAINT': 3100,
-      'MARUTI': 10500,
-      'HCLTECH': 1200,
-      'AXISBANK': 1050,
-      'ULTRACEMCO': 8500,
-      'SUNPHARMA': 1100,
-      'TITAN': 3200
-    };
-    
-    return prices[symbol] || 1000 + Math.random() * 2000;
-  };
-
-  // Simulate real-time price updates
+  // Load historical data and subscribe to real-time updates
   useEffect(() => {
-    const data = generateMarketData(symbol);
-    setCandleData(data);
+    setIsLoading(true);
     
-    if (data.length > 0) {
-      const latestCandle = data[data.length - 1];
-      setCurrentPrice(latestCandle.close);
-      setVolume(latestCandle.volume);
+    // Load historical data
+    const historicalData = marketDataService.generateHistoricalData(symbol, 100);
+    setCandleData(historicalData);
+    
+    // Set initial market status
+    setMarketStatus(marketDataService.getMarketStatus());
+    
+    // Subscribe to real-time price updates
+    const unsubscribe = marketDataService.subscribe(symbol, (tick: MarketTick) => {
+      setCurrentPrice(tick.price);
+      setPriceChange(tick.change);
+      setChangePercent(tick.changePercent);
+      setVolume(tick.volume);
+      setLastUpdate(new Date(tick.timestamp).toLocaleTimeString());
       
-      if (data.length > 1) {
-        const previousClose = data[data.length - 2].close;
-        setPriceChange(latestCandle.close - previousClose);
-      }
+      // Update parent component
+      onPriceUpdate?.(tick.price);
       
-      onPriceUpdate?.(latestCandle.close);
-    }
+      // Update the last candle with real-time price
+      setCandleData(prevData => {
+        if (prevData.length === 0) return prevData;
+        
+        const updatedData = [...prevData];
+        const lastCandle = updatedData[updatedData.length - 1];
+        
+        updatedData[updatedData.length - 1] = {
+          ...lastCandle,
+          close: tick.price,
+          high: Math.max(lastCandle.high, tick.price),
+          low: Math.min(lastCandle.low, tick.price),
+          volume: tick.volume
+        };
+        
+        return updatedData;
+      });
+    });
     
     setIsLoading(false);
+    
+    // Cleanup subscription on unmount or symbol change
+    return () => {
+      unsubscribe();
+    };
   }, [symbol, onPriceUpdate]);
 
-  // Real-time price simulation
+  // Update market status periodically
   useEffect(() => {
-    const interval = setInterval(() => {
-      if (candleData.length === 0) return;
-      
-      const lastCandle = candleData[candleData.length - 1];
-      const volatility = 0.001; // 0.1% per update
-      const change = (Math.random() - 0.5) * volatility;
-      const newPrice = lastCandle.close * (1 + change);
-      
-      setCurrentPrice(newPrice);
-      setPriceChange(newPrice - lastCandle.close);
-      onPriceUpdate?.(newPrice);
-      
-      // Update the last candle
-      const updatedData = [...candleData];
-      updatedData[updatedData.length - 1] = {
-        ...lastCandle,
-        close: newPrice,
-        high: Math.max(lastCandle.high, newPrice),
-        low: Math.min(lastCandle.low, newPrice)
-      };
-      setCandleData(updatedData);
-    }, 2000); // Update every 2 seconds
+    const statusInterval = setInterval(() => {
+      setMarketStatus(marketDataService.getMarketStatus());
+    }, 60000); // Update every minute
     
-    return () => clearInterval(interval);
-  }, [candleData, onPriceUpdate]);
+    return () => clearInterval(statusInterval);
+  }, []);
 
   // Draw the chart
   useEffect(() => {
