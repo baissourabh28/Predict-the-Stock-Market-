@@ -1,39 +1,40 @@
 /* Modern Navbar Styles */
 .modern-navbar {
-  background: rgba(255, 255, 255, 0.95);
+  background: rgba(15, 20, 25, 0.98);
   backdrop-filter: blur(20px);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
   position: sticky;
   top: 0;
   z-index: 1000;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3),
+              inset 0 1px 0 rgba(255, 255, 255, 0.1);
 }
 
 .navbar-container {
   max-width: 1400px;
   margin: 0 auto;
-  padding: 0 20px;
+  padding: 0 24px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  height: 70px;
+  height: 72px;
 }
 
 .navbar-logo {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 12px;
   text-decoration: none;
-  color: #2c3e50;
-  font-weight: 700;
-  font-size: 1.5rem;
-  transition: transform 0.3s ease;
+  color: white;
+  font-weight: 800;
+  font-size: 1.6rem;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .navbar-logo:hover {
   transform: scale(1.05);
   text-decoration: none;
-  color: #2c3e50;
+  color: white;
 }
 
 .logo-icon {
