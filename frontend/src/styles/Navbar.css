@@ -61,31 +61,33 @@
 .nav-item {
   display: flex;
   align-items: center;
-  gap: 8px;
-  padding: 10px 16px;
-  border-radius: 25px;
+  gap: 10px;
+  padding: 12px 20px;
+  border-radius: 12px;
   text-decoration: none;
-  color: #555;
+  color: #cbd5e0;
   font-weight: 500;
-  transition: all 0.3s ease;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   position: relative;
+  font-size: 0.95rem;
 }
 
 .nav-item:hover {
-  background: rgba(102, 126, 234, 0.1);
-  color: #667eea;
+  background: rgba(0, 212, 170, 0.1);
+  color: #00d4aa;
   text-decoration: none;
   transform: translateY(-2px);
 }
 
 .nav-item.active {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: white;
-  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+  background: linear-gradient(135deg, #00d4aa 0%, #4fd1c7 100%);
+  color: #0a0e13;
+  box-shadow: 0 4px 16px rgba(0, 212, 170, 0.3);
+  font-weight: 600;
 }
 
 .nav-item.active:hover {
-  color: white;
+  color: #0a0e13;
 }
 
 .nav-icon {
