@@ -140,23 +140,73 @@ const EnhancedTradingDashboard: React.FC = () => {
   }, [selectedSymbol, timeframe]);
 
   const searchStocks = async (query: string) => {
+    console.log('🔍 Searching for:', query);
+    
     if (query.length < 2) {
       setSearchResults([]);
       return;
     }
 
-    // Mock search results (in real implementation, this would call Upstox search API)
-    const mockResults = popularSymbols
+    // Extended stock list for better search results
+    const allStocks = [
+      ...popularSymbols,
+      { symbol: 'ADANIPORTS', name: 'Adani Ports and SEZ' },
+      { symbol: 'ASIANPAINT', name: 'Asian Paints' },
+      { symbol: 'AXISBANK', name: 'Axis Bank' },
+      { symbol: 'BAJAJ-AUTO', name: 'Bajaj Auto' },
+      { symbol: 'BAJFINANCE', name: 'Bajaj Finance' },
+      { symbol: 'BAJAJFINSV', name: 'Bajaj Finserv' },
+      { symbol: 'BHARTIARTL', name: 'Bharti Airtel' },
+      { symbol: 'BPCL', name: 'Bharat Petroleum' },
+      { symbol: 'BRITANNIA', name: 'Britannia Industries' },
+      { symbol: 'CIPLA', name: 'Cipla' },
+      { symbol: 'COALINDIA', name: 'Coal India' },
+      { symbol: 'DIVISLAB', name: 'Divi\'s Laboratories' },
+      { symbol: 'DRREDDY', name: 'Dr. Reddy\'s Labs' },
+      { symbol: 'EICHERMOT', name: 'Eicher Motors' },
+      { symbol: 'GRASIM', name: 'Grasim Industries' },
+      { symbol: 'HCLTECH', name: 'HCL Technologies' },
+      { symbol: 'HEROMOTOCO', name: 'Hero MotoCorp' },
+      { symbol: 'HINDALCO', name: 'Hindalco Industries' },
+      { symbol: 'HINDUNILVR', name: 'Hindustan Unilever' },
+      { symbol: 'ICICIBANK', name: 'ICICI Bank' },
+      { symbol: 'ITC', name: 'ITC Limited' },
+      { symbol: 'JSWSTEEL', name: 'JSW Steel' },
+      { symbol: 'KOTAKBANK', name: 'Kotak Mahindra Bank' },
+      { symbol: 'LT', name: 'Larsen & Toubro' },
+      { symbol: 'M&M', name: 'Mahindra & Mahindra' },
+      { symbol: 'MARUTI', name: 'Maruti Suzuki' },
+      { symbol: 'NESTLEIND', name: 'Nestle India' },
+      { symbol: 'NTPC', name: 'NTPC Limited' },
+      { symbol: 'ONGC', name: 'Oil & Natural Gas Corp' },
+      { symbol: 'POWERGRID', name: 'Power Grid Corporation' },
+      { symbol: 'SBILIFE', name: 'SBI Life Insurance' },
+      { symbol: 'SBIN', name: 'State Bank of India' },
+      { symbol: 'SUNPHARMA', name: 'Sun Pharmaceutical' },
+      { symbol: 'TATACONSUM', name: 'Tata Consumer Products' },
+      { symbol: 'TATAMOTORS', name: 'Tata Motors' },
+      { symbol: 'TATASTEEL', name: 'Tata Steel' },
+      { symbol: 'TECHM', name: 'Tech Mahindra' },
+      { symbol: 'TITAN', name: 'Titan Company' },
+      { symbol: 'ULTRACEMCO', name: 'UltraTech Cement' },
+      { symbol: 'UPL', name: 'UPL Limited' },
+      { symbol: 'WIPRO', name: 'Wipro Limited' }
+    ];
+
+    // Search in both symbol and name
+    const mockResults = allStocks
       .filter(stock => 
         stock.symbol.toLowerCase().includes(query.toLowerCase()) ||
         stock.name.toLowerCase().includes(query.toLowerCase())
       )
+      .slice(0, 10) // Limit to 10 results
       .map(stock => ({
         symbol: stock.symbol,
         name: stock.name,
         exchange: 'NSE'
       }));
 
+    console.log('📊 Search results:', mockResults.length, 'stocks found');
     setSearchResults(mockResults);
   };
 
