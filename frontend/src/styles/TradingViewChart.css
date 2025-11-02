@@ -1,10 +1,10 @@
 /* TradingView Chart Styles */
 .tradingview-chart {
-  background: rgba(26, 31, 46, 0.95);
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(58, 69, 83, 0.5);
-  border-radius: 12px;
-  padding: 20px;
+  background: linear-gradient(145deg, rgba(15, 20, 35, 0.98), rgba(26, 31, 46, 0.95));
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(0, 212, 170, 0.2);
+  border-radius: 16px;
+  padding: 24px;
   color: white;
   height: 100%;
   display: flex;
