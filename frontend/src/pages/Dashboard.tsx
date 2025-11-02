@@ -270,7 +270,14 @@ const Dashboard: React.FC = () => {
             <div className="action-description">View charts and generate signals</div>
           </Link>
           
-          <div className="action-card" onClick={() => window.location.reload()}>
+          <div className="action-card" onClick={async () => {
+            setLoading(true);
+            await checkApiHealth();
+            await fetchMarketOverview();
+            await fetchRecentSignals();
+            await fetchPortfolioStats();
+            setLoading(false);
+          }}>
             <div className="action-icon">🔄</div>
             <div className="action-title">Refresh Data</div>
             <div className="action-description">Update market data and signals</div>
