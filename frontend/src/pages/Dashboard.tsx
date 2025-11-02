@@ -115,14 +115,21 @@ const Dashboard: React.FC = () => {
 
   const fetchPortfolioStats = async () => {
     try {
-      // Mock portfolio data
+      console.log('💼 Refreshing portfolio stats...');
+      // Generate dynamic portfolio data
+      const baseValue = 125000;
+      const dayChangePercent = (Math.random() - 0.5) * 6; // -3% to +3%
+      const dayChange = baseValue * (dayChangePercent / 100);
+      const totalGainLoss = baseValue * ((Math.random() - 0.3) * 0.4); // -12% to +28%
+      
       const mockStats: PortfolioStats = {
-        totalValue: 125000,
-        dayChange: 2340.50,
-        dayChangePercent: 1.91,
-        totalGainLoss: 15750.25
+        totalValue: parseFloat((baseValue + dayChange).toFixed(2)),
+        dayChange: parseFloat(dayChange.toFixed(2)),
+        dayChangePercent: parseFloat(dayChangePercent.toFixed(2)),
+        totalGainLoss: parseFloat(totalGainLoss.toFixed(2))
       };
       setPortfolioStats(mockStats);
+      console.log('✅ Portfolio stats refreshed');
     } catch (error) {
       console.error('Failed to fetch portfolio stats:', error);
     }
