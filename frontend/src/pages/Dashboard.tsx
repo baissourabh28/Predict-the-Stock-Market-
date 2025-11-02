@@ -46,10 +46,12 @@ const Dashboard: React.FC = () => {
 
   const checkApiHealth = async () => {
     try {
-      const response = await axios.get('/api/v1/health');
+      await axios.get('/api/v1/health');
       setApiStatus('connected');
+      console.log('✅ API health check passed');
     } catch (error) {
       setApiStatus('disconnected');
+      console.log('❌ API health check failed');
     }
   };
 
