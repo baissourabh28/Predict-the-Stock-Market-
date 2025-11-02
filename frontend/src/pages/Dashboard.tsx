@@ -94,14 +94,20 @@ const Dashboard: React.FC = () => {
 
   const fetchRecentSignals = async () => {
     try {
-      // Mock data for recent signals
-      const mockSignals: RecentSignal[] = [
-        { symbol: 'RELIANCE', signal_type: 'BUY', strength: 0.85, timestamp: new Date().toISOString() },
-        { symbol: 'TCS', signal_type: 'HOLD', strength: 0.65, timestamp: new Date(Date.now() - 3600000).toISOString() },
-        { symbol: 'INFY', signal_type: 'BUY', strength: 0.78, timestamp: new Date(Date.now() - 7200000).toISOString() },
-        { symbol: 'HDFC', signal_type: 'SELL', strength: 0.72, timestamp: new Date(Date.now() - 10800000).toISOString() }
-      ];
+      console.log('🎯 Refreshing trading signals...');
+      const symbols = ['RELIANCE', 'TCS', 'INFY', 'HDFC', 'NIFTY50', 'SENSEX'];
+      const signalTypes = ['BUY', 'SELL', 'HOLD'];
+      
+      // Generate dynamic signals
+      const mockSignals: RecentSignal[] = symbols.slice(0, 4).map((symbol, index) => ({
+        symbol: symbol,
+        signal_type: signalTypes[Math.floor(Math.random() * signalTypes.length)],
+        strength: parseFloat((0.5 + Math.random() * 0.4).toFixed(2)), // 0.5 to 0.9
+        timestamp: new Date(Date.now() - (index * 1800000)).toISOString() // 30 min intervals
+      }));
+      
       setRecentSignals(mockSignals);
+      console.log('✅ Trading signals refreshed');
     } catch (error) {
       console.error('Failed to fetch recent signals:', error);
     }
