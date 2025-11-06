@@ -23,7 +23,7 @@ const Navbar: React.FC = () => {
       <div className="navbar-container">
         <Link to="/" className="navbar-logo">
           <span className="logo-icon">📈</span>
-          <span className="logo-text">Stock Market Candlestick Prediction with AI/ML </span>
+          <span className="logo-text">Stock Market Candlestick Prediction </span>
         </Link>
         
         <div className={`navbar-menu ${isMenuOpen ? 'active' : ''}`}>
