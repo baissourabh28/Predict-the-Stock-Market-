@@ -5,7 +5,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker, Session
 from sqlalchemy.pool import StaticPool
-from typing import Generator
+from typing import Generator, Optional
 import redis
 from app.core.config import settings
 
@@ -22,8 +22,22 @@ SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 # Base class for database models
 Base = declarative_base()
 
-# Redis setup
-redis_client = redis.from_url(settings.redis_url, decode_responses=True)
+# Redis setup with error handling
+try:
+    redis_client = redis.from_url(
+        settings.redis_url, 
+        decode_responses=True,
+        socket_connect_timeout=5,
+        socket_timeout=5,
+        retry_on_timeout=True
+    )
+    # Test connection
+    redis_client.ping()
+except (redis.ConnectionError, redis.TimeoutError) as e:
+    import structlog
+    logger = structlog.get_logger()
+    logger.warning("Redis connection failed, caching will be disabled", error=str(e))
+    redis_client = None
 
 
 def get_db() -> Generator[Session, None, None]:
@@ -37,9 +51,9 @@ def get_db() -> Generator[Session, None, None]:
         db.close()
 
 
-def get_redis() -> redis.Redis:
+def get_redis() -> Optional[redis.Redis]:
     """
-    Get Redis client instance
+    Get Redis client instance (may be None if Redis is unavailable)
     """
     return redis_client
 

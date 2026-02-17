@@ -12,7 +12,7 @@ class Settings(BaseSettings):
     # Application settings
     app_name: str = "Trading Dashboard"
     app_version: str = "1.0.0"
-    debug: bool = False
+    debug: bool = True  # Set to False in production
     
     # Server settings
     host: str = "0.0.0.0"
@@ -27,9 +27,18 @@ class Settings(BaseSettings):
     redis_cache_ttl: int = 300  # 5 minutes default TTL
     
     # JWT settings
-    secret_key: str = "your-secret-key-change-in-production"
+    secret_key: str = os.getenv("SECRET_KEY", "dev-secret-key-CHANGE-IN-PRODUCTION-OR-APP-WILL-NOT-START")
     algorithm: str = "HS256"
     access_token_expire_minutes: int = 480  # 8 hours
+    
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        # Validate secret key in production
+        if not self.debug and self.secret_key == "dev-secret-key-CHANGE-IN-PRODUCTION-OR-APP-WILL-NOT-START":
+            raise ValueError(
+                "SECRET_KEY environment variable must be set in production! "
+                "Generate a secure key with: openssl rand -hex 32"
+            )
     
     # Upstox API settings
     upstox_api_key: Optional[str] = None

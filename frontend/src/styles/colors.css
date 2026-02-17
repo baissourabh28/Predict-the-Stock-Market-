@@ -1,0 +1,66 @@
+/* 
+ * Color Scheme - Professional Trading Dashboard
+ * Primary: Blue-Purple gradient for trust and professionalism
+ * Accent: Gold for highlights and important elements
+ * Success: Green for profits and buy signals
+ * Danger: Red for losses and sell signals
+ */
+
+:root {
+  /* Primary Colors - Blue-Purple Theme */
+  --primary-color: #4F46E5;
+  --primary-light: #6366F1;
+  --primary-dark: #4338CA;
+  --primary-gradient: linear-gradient(135deg, #4F46E5 0%, #7C3AED 100%);
+  
+  /* Accent Colors - Gold/Amber */
+  --accent-color: #F59E0B;
+  --accent-light: #FBBF24;
+  --accent-dark: #D97706;
+  
+  /* Success Colors - Green */
+  --success-color: #10B981;
+  --success-light: #34D399;
+  --success-dark: #059669;
+  
+  /* Danger Colors - Red */
+  --danger-color: #EF4444;
+  --danger-light: #F87171;
+  --danger-dark: #DC2626;
+  
+  /* Neutral Colors - Dark Theme */
+  --bg-primary: #0f1419;
+  --bg-secondary: #1a1f2e;
+  --bg-tertiary: #2d3748;
+  --bg-hover: #3a4553;
+  
+  /* Text Colors */
+  --text-primary: #ffffff;
+  --text-secondary: #a0aec0;
+  --text-muted: #718096;
+  
+  /* Border Colors */
+  --border-color: #3a4553;
+  --border-light: #4a5568;
+  
+  /* Chart Colors */
+  --chart-green: #10B981;
+  --chart-red: #EF4444;
+  --chart-grid: rgba(255, 255, 255, 0.1);
+  
+  /* Glassmorphism */
+  --glass-bg: rgba(26, 31, 46, 0.8);
+  --glass-border: rgba(255, 255, 255, 0.1);
+  
+  /* Shadows */
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+  --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+  
+  /* Glow Effects */
+  --glow-primary: 0 0 20px rgba(79, 70, 229, 0.3);
+  --glow-success: 0 0 20px rgba(16, 185, 129, 0.3);
+  --glow-danger: 0 0 20px rgba(239, 68, 68, 0.3);
+  --glow-accent: 0 0 20px rgba(245, 158, 11, 0.3);
+}

@@ -8,40 +8,32 @@ from passlib.context import CryptContext
 from fastapi import HTTPException, status
 from app.core.config import settings
 
-# Password hashing context - using a simpler approach to avoid bcrypt version issues
-try:
-    pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
-except Exception:
-    # Fallback to a simpler hashing method if bcrypt has issues
-    import hashlib
-    pwd_context = None
+# Password hashing context
+pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 
 def verify_password(plain_password: str, hashed_password: str) -> bool:
     """Verify a plain password against its hash"""
-    if pwd_context:
-        try:
-            return pwd_context.verify(plain_password, hashed_password)
-        except Exception:
-            pass
-    
-    # Fallback verification using simple hash
-    import hashlib
-    simple_hash = hashlib.sha256((plain_password + "salt").encode()).hexdigest()
-    return simple_hash == hashed_password
+    try:
+        return pwd_context.verify(plain_password, hashed_password)
+    except Exception as e:
+        # Log the error but don't expose details
+        import structlog
+        logger = structlog.get_logger()
+        logger.error("Password verification failed", error=str(e))
+        return False
 
 
 def get_password_hash(password: str) -> str:
     """Generate password hash"""
-    if pwd_context:
-        try:
-            return pwd_context.hash(password)
-        except Exception:
-            pass
-    
-    # Fallback hashing using simple hash (for development only)
-    import hashlib
-    return hashlib.sha256((password + "salt").encode()).hexdigest()
+    try:
+        return pwd_context.hash(password)
+    except Exception as e:
+        # Log the error and raise - don't allow weak hashing
+        import structlog
+        logger = structlog.get_logger()
+        logger.error("Password hashing failed", error=str(e))
+        raise RuntimeError("Failed to hash password. Ensure passlib[bcrypt] is installed.")
 
 
 def create_access_token(data: dict, expires_delta: Optional[timedelta] = None) -> str:

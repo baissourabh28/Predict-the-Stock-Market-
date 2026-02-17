@@ -63,7 +63,9 @@ logs/
 
 # Database (keep example, ignore actual data)
 trading_dashboard.db
+trading_dashboard.db-journal
 *.sqlite3
+*.db-journal
 
 # ML Models
 *.pkl

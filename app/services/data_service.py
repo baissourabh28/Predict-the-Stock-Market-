@@ -9,7 +9,7 @@ import structlog
 
 from app.models.market_data import MarketData, Prediction, TradingSignal
 from app.schemas.market_data import CandlestickDataSchema, PredictionSchema, TradingSignalSchema
-from app.services.upstox_service import UpstoxService, CandlestickData
+from app.services.yahoo_finance_service import YahooFinanceService, CandlestickData
 
 logger = structlog.get_logger()
 
@@ -18,15 +18,15 @@ class DataService:
     """Service for managing market data operations"""
     
     def __init__(self):
-        self.upstox_service = UpstoxService()
+        self.yahoo_service = YahooFinanceService()
     
     async def initialize(self):
         """Initialize the data service"""
-        await self.upstox_service.initialize()
+        logger.info("Data service initialized with Yahoo Finance")
     
     async def cleanup(self):
         """Cleanup resources"""
-        await self.upstox_service.cleanup()
+        logger.info("Data service cleanup")
     
     def store_market_data(self, db: Session, data: CandlestickData) -> MarketData:
         """Store candlestick data in database"""
@@ -124,10 +124,10 @@ class DataService:
         symbol: str, 
         timeframe: str = "1m"
     ) -> Optional[MarketData]:
-        """Fetch live data from Upstox and store in database"""
+        """Fetch live data from Yahoo Finance and store in database"""
         try:
-            # Fetch from Upstox API
-            live_data = await self.upstox_service.get_live_quote(symbol, timeframe)
+            # Fetch from Yahoo Finance API
+            live_data = await self.yahoo_service.get_live_quote(symbol, timeframe)
             
             if live_data:
                 # Store in database
@@ -146,10 +146,10 @@ class DataService:
         days: int = 30, 
         timeframe: str = "1D"
     ) -> List[MarketData]:
-        """Fetch historical data from Upstox and store in database"""
+        """Fetch historical data from Yahoo Finance and store in database"""
         try:
-            # Fetch from Upstox API
-            historical_data = await self.upstox_service.get_historical_candles(symbol, days, timeframe)
+            # Fetch from Yahoo Finance API
+            historical_data = await self.yahoo_service.get_historical_candles(symbol, days, timeframe)
             
             stored_data = []
             for data in historical_data:
@@ -283,8 +283,8 @@ class DataService:
     ) -> Dict[str, MarketData]:
         """Get live quotes for multiple symbols"""
         try:
-            # Fetch from Upstox API
-            quotes = await self.upstox_service.get_multiple_quotes(symbols, timeframe)
+            # Fetch from Yahoo Finance API
+            quotes = await self.yahoo_service.get_multiple_quotes(symbols, timeframe)
             
             results = {}
             for symbol, data in quotes.items():
