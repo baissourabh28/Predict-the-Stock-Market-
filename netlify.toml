@@ -1,6 +1,6 @@
 [build]
   base = "frontend"
-  command = "npm run build"
+  command = "CI=false npm run build"
   publish = "build"
 
 [[redirects]]
@@ -11,6 +11,7 @@
 [build.environment]
   NODE_VERSION = "18"
   NPM_VERSION = "9"
+  CI = "false"
 
-# Optional: Set environment variables in Netlify UI
+# Set REACT_APP_API_URL in Netlify UI under Site settings > Environment variables
 # REACT_APP_API_URL = "your-backend-url"
