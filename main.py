@@ -41,10 +41,19 @@ app = FastAPI(
     debug=settings.debug
 )
 
+# Configure CORS origins
+# TODO: Update with your actual Netlify URL after deployment
+origins = [
+    "http://localhost:3000",  # Local development
+    "http://localhost:8000",  # Local backend
+    # Add your Netlify URL here after deployment:
+    # "https://your-app-name.netlify.app",
+]
+
 # Add middleware
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # Configure appropriately for production
+    allow_origins=origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
