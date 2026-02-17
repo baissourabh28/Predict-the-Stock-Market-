@@ -24,6 +24,7 @@ yfinance==0.2.36
 python-dotenv==1.0.0
 pydantic==2.5.0
 pydantic-settings==2.1.0
+email-validator==2.1.0
 
 # Logging
 structlog==23.2.0
