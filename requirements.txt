@@ -1,35 +1,35 @@
-# FastAPI and web framework
+# Core FastAPI
 fastapi==0.104.1
-uvicorn[standard]==0.24.0
+uvicorn==0.24.0
 python-multipart==0.0.6
 
-# Database and ORM
+# Database
 sqlalchemy==2.0.23
 alembic==1.12.1
 
-# Redis for caching (optional)
-redis==5.0.1
-
-# Authentication and security
+# Authentication
 python-jose[cryptography]==3.3.0
 passlib[bcrypt]==1.7.4
 bcrypt==4.0.1
 
-# Machine Learning - Compatible versions for Python 3.11
-scikit-learn==1.3.2
+# Data & ML (lightweight)
 numpy==1.24.3
 pandas==2.1.4
+scikit-learn==1.3.2
 
-# Real Market Data
+# Market Data
 yfinance==0.2.36
 
-# HTTP client for API integration
-httpx==0.25.2
-
-# Environment and configuration
+# Configuration
 python-dotenv==1.0.0
 pydantic==2.5.0
 pydantic-settings==2.1.0
 
-# Logging and monitoring
+# Logging
 structlog==23.2.0
+
+# HTTP Client
+httpx==0.25.2
+
+# Redis (optional)
+redis==5.0.1
