@@ -82,7 +82,8 @@ async def startup_event():
         logger.info("Database tables created successfully")
     except Exception as e:
         logger.error("Failed to create database tables", error=str(e))
-        raise
+        # Don't raise - allow app to start even if DB creation fails
+        logger.warning("Continuing without database initialization")
 
 
 @app.on_event("shutdown")
